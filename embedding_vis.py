@@ -11,7 +11,9 @@ from tensorboard.plugins import projector
 
 tf.__version__
 
-LOG_DIR = 'embedding_logs_3'
+
+# define the log dor for saving checkpoints
+LOG_DIR = 'embedding_logs'
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
     
@@ -23,17 +25,8 @@ metadata_file = open(os.path.join(LOG_DIR, 'metadata_4_classes.tsv'), 'w')
 metadata_file.write('Class\tName\n')
 
 for label,name in zip(data.labels,data.class_names):
-    metadata_file.write('{}\t{}\n'.format(name,label))
+    metadata_file.write('{}\t{}\n'.format(label,name))
 metadata_file.close()
-
-#%%
-#load fetures
-with open('feature_vectors_400_samples.pkl', 'rb') as f:
-    feature_vectors = pickle.load(f)
-#feature_vectors = np.loadtxt('feature_vectors_400_samples.txt')
-print ("feature_vectors_shape:",feature_vectors.shape)
-print ("num of images:",feature_vectors.shape[0])
-print ("size of individual feature vector:",feature_vectors.shape[1])
 
 #%%   
 #prepare sprite images         
@@ -79,6 +72,15 @@ def images_to_sprite(data):
 sprite = images_to_sprite(img_data)
 cv2.imwrite(os.path.join(LOG_DIR, 'sprite_4_classes.png'), sprite)
 #scipy.misc.imsave(os.path.join(LOG_DIR, 'sprite.png'), sprite)
+
+#%%
+#load features
+with open('feature_vectors_400_samples.pkl', 'rb') as f:
+    feature_vectors = pickle.load(f)
+#feature_vectors = np.loadtxt('feature_vectors_400_samples.txt')
+print ("feature_vectors_shape:",feature_vectors.shape)
+print ("num of images:",feature_vectors.shape[0])
+print ("size of individual feature vector:",feature_vectors.shape[1])
 
 #%%
 features = tf.Variable(feature_vectors, name='features')
