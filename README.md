@@ -139,6 +139,7 @@ For this example it looks like :
 ![Alt text](https://github.com/anujshah1003/tf2_embedding_vis_tensorboard/blob/main/embedding_logs/sprite_4_classes.png)
 
 load features
+
     with open('feature_vectors_400_samples.pkl', 'rb') as f:
         feature_vectors = pickle.load(f)
     #feature_vectors = np.loadtxt('feature_vectors_400_samples.txt')
@@ -149,13 +150,16 @@ load features
     features = tf.Variable(feature_vectors, name='features')
 Create a checkpoint from embedding, the filename and key are
 name of the tensor.
+
     checkpoint = tf.train.Checkpoint(embedding=features)
     checkpoint.save(os.path.join(LOG_DIR, "embedding.ckpt"))
 
 Set up config
+
     config = projector.ProjectorConfig()
     embedding = config.embeddings.add()
-#The name of the tensor will be suffixed by `/.ATTRIBUTES/VARIABLE_VALUE`
+    
+    #The name of the tensor will be suffixed by `/.ATTRIBUTES/VARIABLE_VALUE`
     embedding.tensor_name = "embedding/.ATTRIBUTES/VARIABLE_VALUE"
     # Link this tensor to its metadata file (e.g. labels).
     embedding.metadata_path =  'metadata_4_classes.tsv'
